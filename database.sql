@@ -32,7 +32,7 @@ CREATE TABLE devices
 CREATE TABLE oids
 (
 	id SERIAL NOT NULL,
-	id_device integer NOT NULL,
+	id_model integer NOT NULL,
 	description character varying(40) NOT NULL,
 	mib character varying(30) NOT NULL,
 	CONSTRAINT pk_id_oids PRIMARY KEY (id),
@@ -54,12 +54,12 @@ $body$
 LANGUAGE sql;
 
 -- Obtain device ip, administrator name and email
-CREATE OR REPLACE FUNCTION obtain_mibs(i_target INTEGER, i_description character varying(40)) RETURNS JSON
+CREATE OR REPLACE FUNCTION obtain_mibs(i_target INTEGER) RETURNS JSON
 AS
 $body$
 	SELECT JSON_AGG(src) AS my_json_array
 	FROM (
-	  SELECT oids.mib FROM oids WHERE oids.id_device = i_target AND oids.description = i_description
+	  SELECT oids.description, oids.mib FROM oids,devices WHERE oids.id_model = devices.id_model AND devices.id_device = i_target ORDER BY oids.id
 	) src
 	;
 $body$
@@ -123,5 +123,8 @@ INSERT INTO users (user_name, email) VALUES ('Vinicio Rodríguez','viniciorodrig
 INSERT INTO users (user_name, email) VALUES ('Rogelio Gonzáles','rojo@tec.ac.cr');
 INSERT INTO models (device_model) VALUES ('Cisco_Catalyst_2950');
 SELECT insert_new_device(1,'SwitchTest', '198.162.1.1'::inet::cidr,1);
-SELECT insert_new_oids(1, 'Port trafic', '1.3.6.1.2.1.2.2.1.11');
+SELECT insert_new_oids(1, 'Interfaces number', '1.3.6.1.2.1.2.1.0');
 SELECT insert_new_oids(1, 'Port description', '1.3.6.1.2.1.2.2.1.2');
+SELECT insert_new_oids(1, 'Download Packets', '1.3.6.1.2.1.2.2.1.11');
+SELECT insert_new_oids(1, 'Upload Packets', '1.3.6.1.2.1.2.2.1.17');
+

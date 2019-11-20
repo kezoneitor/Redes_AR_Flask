@@ -63,29 +63,29 @@ def saveDevice():
     deviceName = request.form["name"]
     #return render_template('mibs.html', deviceName=deviceName)
 
-@app.route('/getDeviceInformation', methods = ['POST', 'GET'])
+@app.route('/getCisco', methods = ['POST', 'GET'])
 def getDeviceInformation():
-    response = json.loads(request.form)
-    target = response['SWID']
-    user = connection("SELECT obtain_device_information(" + target + ")")
+    #response = json.loads(request.form)
+    #target = response['SWID']
+    target = request.form['SWID']
+    print(target)
+    user = connection("SELECT obtain_device_information(" + target + ")")[0]
     oids = connection("SELECT obtain_mibs(" + target + ")")
-    lenInterfaces = get(user["ip"], [oids[0]["mib"]],
+    ip = user["ip"].split('/')[0]
+    lenInterfaces = get(ip, [oids[0]["mib"]],
                         hlapi.CommunityData(default_community))
     results = []
-    for interface in range(1, lenInterfaces):
+    for interface in range(1, lenInterfaces[oids[0]["mib"]]+1):
         dataInterface = []
         for oid in range(1, len(oids)):
-                dataInterface.append(oids[oid]["mib"]+'.'+str(interface+1))
-        results.append(
-            get(user["ip"], dataInterface, hlapi.CommunityData(default_community)).values())
+                dataInterface.append(oids[oid]["mib"]+'.'+str(interface))
+        results.append(list(get(ip, dataInterface, hlapi.CommunityData(default_community)).values()))
 
     last_data = results[len(results) - 1]
     data_str = ''
     for result in results:
-        data_str += str((result[2]+result[3])*100 /
-                        (last_data[2]+last_data[3]))+","
-        +result[1]+","+result[2]+","+result[3]+";"
-    return data_str[:len(data_str-1)]
+        data_str += str((result[1]+result[2])*100/(last_data[1] + last_data[2]))+","+','.join(str(v) for v in result)+";"
+    return data_str[:len(data_str)-1]
 
 # Run application
 if __name__ == '__main__':

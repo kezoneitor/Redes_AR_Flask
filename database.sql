@@ -13,7 +13,7 @@ CREATE TABLE users
 CREATE TABLE models
 (
 	id_model SERIAL NOT NULL,
-	device_model character varying(20) NOT NULL,
+	device_model character varying(40) NOT NULL,
 	CONSTRAINT pk_id_models PRIMARY KEY (id_model)
 );
 

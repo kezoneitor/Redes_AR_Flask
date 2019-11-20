@@ -1,0 +1,13 @@
+{% macro dropdown(name, data, selected = [], extra = '') -%}
+<select name="{{ name }}" class="selection-2" onchange="if(options[selectedIndex].text == 'Other')
+                                                        {
+                                                        document.getElementById('newModel').style.display = 'block'
+                                                        }
+                                                        else{
+                                                        document.getElementById('newModel').style.display = 'none'
+                                                        }">
+    {%- for ind, val in data %}
+    <option value="{{ ind }}" {% if ind in selected %}selected="selected"{% endif %}>{{ val }}</option>
+    {%- endfor %}
+</select>
+{%- endmacro %}

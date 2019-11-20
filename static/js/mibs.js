@@ -12,33 +12,45 @@
             else {
                 $(this).removeClass('has-val');
             }
-        })    
+        })
     })
 
     /*==================================================================
     [ Validate ]*/
-    var name = $('.validate-input input[name="name"]');
-    var IP = $('.validate-input input[name="IP"]');
-    console.log(IP);
-    var model = $('.validate-input input[name="model"]');
+    var oidNumber = $('.validate-input input[name="oidNumber"]');
+    var oidIp = $('.validate-input input[name="oidIp"]');
+    console.log(oidIp);
+    var oidDescription = $('.validate-input input[name="oidDescription"]');
+    var oidInputP = $('.validate-input input[name="oidInputP"]');
+    var oidOutputP = $('.validate-input input[name="oidOutputP"]');
 
 
     $('.validate-form').on('submit',function(){
 
         var check = true;
 
-        if($(name).val().trim() == ''){
-            showValidate(name);
+        if($(oidNumber).val().trim() == ''){
+            showValidate(oidNumber);
             check=false;
         }
 
-        if($(IP).val().trim() == ''){
-            showValidate(IP);
+        if($(oidIp).val().trim() == ''){
+            showValidate(oidIp);
             check=false;
         }
 
-        if($(model).val().trim() == ''){
-            showValidate(model);
+        if($(oidDescription).val().trim() == ''){
+            showValidate(oidDescription);
+            check=false;
+        }
+
+        if($(oidInputP).val().trim() == ''){
+            showValidate(oidInputP);
+            check=false;
+        }
+
+        if($(oidOutputP).val().trim() == ''){
+            showValidate(oidOutputP);
             check=false;
         }
 

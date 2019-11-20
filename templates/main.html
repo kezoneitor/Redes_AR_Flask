@@ -27,10 +27,16 @@
 
 	<div class="container-contact100">
 		<div class="wrap-contact100">
-			<form class="contact100-form validate-form">
+			<form class="contact100-form validate-form" action="/newDevice" method="post">
 				<span class="contact100-form-title">
 					Register network devices
 				</span>
+				{% for message in get_flashed_messages() %}
+				<div class="alert alert-info">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					{{ message }}
+				</div>
+				{% endfor %}
 
 				<div class="wrap-input100 validate-input" data-validate="Name is required">
 					<span class="label-input100">Device Name</span>
@@ -64,14 +70,14 @@
 
 				<div class="wrap-input100 validate-input" data-validate = "Model is required" style="display:none" id="newModel">
 					<span class="label-input100">New model</span>
-					<input class="input100" type="text" name="model" placeholder="Add model" value=" ">
+					<input class="input100" type="text" name="model" placeholder="Add model" value="noNeeded">
 					<span class="focus-input100"></span>
 				</div>
 
 				<div class="container-contact100-form-btn">
 					<div class="wrap-contact100-form-btn">
 						<div class="contact100-form-bgbtn"></div>
-						<button class="contact100-form-btn" onclick="validateForm()">
+						<button class="contact100-form-btn">
 							<span>
 								Submit
 								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>

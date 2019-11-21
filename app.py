@@ -63,7 +63,8 @@ def saveDevice():
     deviceName = request.form["name"]
     #return render_template('mibs.html', deviceName=deviceName)
 
-@app.route('/getCisco', methods = ['POST', 'GET'])
+
+@app.route('/getDeviceInformation', methods=['POST', 'GET'])
 def getDeviceInformation():
     #response = json.loads(request.form)
     #target = response['SWID']
@@ -72,6 +73,7 @@ def getDeviceInformation():
     user = connection("SELECT obtain_device_information(" + target + ")")[0]
     oids = connection("SELECT obtain_mibs(" + target + ")")
     ip = user["ip"].split('/')[0]
+    
     lenInterfaces = get(ip, [oids[0]["mib"]],
                         hlapi.CommunityData(default_community))
     results = []
@@ -84,8 +86,17 @@ def getDeviceInformation():
     last_data = results[len(results) - 1]
     data_str = ''
     for result in results:
-        data_str += str((result[1]+result[2])*100/(last_data[1] + last_data[2]))+","+','.join(str(v) for v in result)+";"
+        data_str += str((result[1]+result[2])*100//(last_data[1] + last_data[2]))+","+','.join(str(v) for v in result)+";"
     return data_str[:len(data_str)-1]
+
+@app.route('/getEmail', methods = ['POST', 'GET'])
+def getEmail():
+    #response = json.loads(request.form)
+    #target = response['SWID']
+    target = request.form['SWID']
+    print(target)
+    user = connection("SELECT obtain_device_information(" + target + ")")[0]
+    return user["email"]
 
 # Run application
 if __name__ == '__main__':

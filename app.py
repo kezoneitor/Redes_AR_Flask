@@ -136,11 +136,9 @@ def getDeviceInformation():
     #response = json.loads(request.form)
     #target = response['SWID']
     target = request.form['SWID']
-    print(target)
     user = connection("SELECT obtain_device_information(" + target + ")")[0]
     oids = connection("SELECT obtain_mibs(" + target + ")")
     ip = user["ip"].split('/')[0]
-    
     lenInterfaces = get(ip, [oids[0]["mib"]],
                         hlapi.CommunityData(default_community))
     results = []
@@ -161,7 +159,6 @@ def getEmail():
     #response = json.loads(request.form)
     #target = response['SWID']
     target = request.form['SWID']
-    print(target)
     user = connection("SELECT obtain_device_information(" + target + ")")[0]
     return user["email"]
 
